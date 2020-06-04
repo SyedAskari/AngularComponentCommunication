@@ -11,10 +11,17 @@ export class ProductShellListComponent implements OnInit {
   pageTitle: string = 'Products';
   errorMessage: string;
   products: IProduct[];
+  selectedProduct: IProduct | null;
 
   constructor(private productService: ProductService) { }
 
   ngOnInit(): void {
+    // When we naviagte back and we want the selected product to selected
+    // we can subscribe to the selected product
+    this.productService.selectedProductChanges$.subscribe(selectedProduct => {
+      this.selectedProduct = selectedProduct;
+    });
+
     this.productService.getProducts().subscribe(
       (products: IProduct[]) => {
         this.products = products;
@@ -24,7 +31,8 @@ export class ProductShellListComponent implements OnInit {
   }
 
   onSelected(product: IProduct): void {
-    this.productService.currentProduct = product;
+    // this.productService.currentProduct = product;
+    this.productService.changeSelectedProduct(product);
   }
 
 }
